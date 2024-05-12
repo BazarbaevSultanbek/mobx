@@ -1,37 +1,45 @@
 import { MoonFilled } from '@ant-design/icons';
-
 import { Select } from 'antd'
 import { TextField } from '@mui/material';
 import { observer } from 'mobx-react-lite';
 import Country from '../../store/Country';
-import { useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Link, Route, Routes } from 'react-router-dom';
+import Info from '../Info/Info';
 
 const MainPage = observer(() => {
+    const [clickedCountry, setClickedCountry] = useState(null)
+    const [showMain, setshowMain] = useState(true)
+
     useEffect(() => {
-        Country.FetchCountries()
-    }, [])
+        Country.FetchCountries();
+    }, []);
 
     const handleFilter = (value) => {
-        Country.SelectFilter(value)
-    }
+        Country.SelectFilter(value);
+    };
 
     const toggleDarkMode = () => {
         Country.ThemeMode(Country.isDarkMode ? "light" : "dark");
     }
 
+
     return (
         <div className={`MainPage ${Country.isDarkMode ? "dark-mode" : ""}`}>
-            <div className="MainPage-top" >
+            <div className="MainPage-top">
                 <MoonFilled />
                 <h3 onClick={toggleDarkMode}>Dark mode</h3>
             </div>
             <div className="container">
-                <div className="MainPage-block">
+                <div className='MainPage-pagination'>
+                    <Routes>
+                        <Route path={`/${clickedCountry}`} element={<Info clickedCountry={clickedCountry} setClickedCountry={setClickedCountry} setshowMain={setshowMain} showMain={showMain} />} />
+                    </Routes>
+                </div>
+                <div className="MainPage-block" style={{ height: Country.countries.length ? "auto" : "100vh", display: showMain ? 'block' : 'none' }}>
                     <div className="MainPage-block-navi">
                         <div>
-                            <TextField id="filled-search" label="Search country"
-                                onChange={(e) => Country.searchCountry(e.target.value)} type="search" variant="filled" style={{ width: '800px', height: 'auto' }} />
+                            <TextField id="filled-search" label="Search country" onChange={(e) => Country.searchCountry(e.target.value)} type="search" variant="filled" style={{ width: '800px', height: 'auto' }} />
                         </div>
                         <div>
                             <Select
@@ -67,19 +75,18 @@ const MainPage = observer(() => {
                                         label: 'Oceania',
                                     },
                                     {
-                                        value: 'Polar',
+                                        value: 'Antarctic',
                                         label: 'Polar',
                                     },
                                 ]}
                             />
                         </div>
                     </div>
-
-                    <div className='MainPage-block-countries'>
-                        {
-                            Country.countries.map((item, index) => (
-                                <Link to={`/${item.name.common}`}>
-                                    <div key={index} className='MainPage-block-countries-items'>
+                    <div className="MainPage-block-cs">
+                        <div className='MainPage-block-countries'>
+                            {Country.countries.map((item, index) => (
+                                <Link to={`./${item.cca3}`} key={index}>
+                                    <div key={index} className='MainPage-block-countries-items' onClick={() => { setClickedCountry(item.cca3), setshowMain(false) }}>
                                         <div>
                                             <img src={item.flags.png} alt={item.name.common} />
                                         </div>
@@ -91,13 +98,13 @@ const MainPage = observer(() => {
                                         </div>
                                     </div>
                                 </Link>
-                            ))
-                        }
+                            ))}
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     );
-})
+});
 
 export default MainPage;

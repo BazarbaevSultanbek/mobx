@@ -35,6 +35,7 @@ class Country {
                 this.allCountries = json;
                 this.countries = json;
                 this.countries.sort((a, b) => a.name.common.localeCompare(b.name.common));
+                this.allCountries.sort((a, b) => a.name.common.localeCompare(b.name.common));
             })
             .catch(error => {
                 console.error("Failed to fetch countries", error);

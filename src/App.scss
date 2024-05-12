@@ -25,6 +25,13 @@ h3 {
   height: 100%;
   padding-bottom: 54px;
 
+
+
+  .Info-inner-data-text{
+    p{
+      color:white !important;
+    }
+  }
   .MainPage-top {
     background-color: #292c31;
     color: white;
@@ -60,6 +67,9 @@ h3 {
 
     &-inner-data {
       color: white;
+        h2{
+    color:white !important;
+  }
     }
   }
 

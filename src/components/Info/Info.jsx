@@ -11,12 +11,6 @@ const Info = observer(({ clickedCountry, setClickedCountry, setshowMain, showMai
     }, []);
 
 
-    Country.countries.map((item, index) => {
-        if (item.cioc === clickedCountry) {
-            console.log(clickedCountry, item.cioc);
-        }
-    })
-
     const handleBackClick = () => {
         setClickedCountry(null);
         setshowMain(true);
